@@ -1,0 +1,88 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/">Inicio</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Ver Pozos</li>
+  </ol>
+</nav>
+
+<div class="ver-pozo p-5">
+  {{#each rows}}
+  <div class="row mb-5">
+    <div class="col text-center">
+      <h3>{{this.id_pozo}} ----- {{this.cabillero_asignado}}</h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Nombre Pozo</th>
+            <th scope="col">Cabillero</th>
+            <th scope="col">Fecha Fin</th>
+            <th scope="col">Tiempo Mudanza</th>
+            <th scope="col">TDO</th>
+            <th scope="col">Tiempo Total</th>
+            <th scope="col">Tiempo Mudanza Neto</th>
+            <th scope="col">TDO Neto</th>
+            <th scope="col">Tiempo Total Neto</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">{{this.id_pozo}}</th>
+            <td>{{this.cabillero_asignado}}</td>
+            <td>{{this.fecha_fin}}</td>
+            <td>{{this.t_mudanza}}</td>
+            <td>{{this.tdo}}</td>
+            <td>{{this.t_total}}</td>
+            <td>{{this.t_mudanza_neto}}</td>
+            <td>{{this.tdo_neto}}</td>
+            <td>{{this.t_total_neto}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+ <div>
+    <canvas id="myChart-{{@index}}"></canvas>
+  </div>
+{{/each}}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    {{#each rows}}
+      const ctx{{@index}} = document.getElementById('myChart-{{@index}}').getContext('2d');
+      new Chart(ctx{{@index}}, {
+        type: 'bar',
+         data: {
+          labels: [
+            'Tiempo Mudanza',
+            'TDO',
+            'Tiempo Total'
+          ],
+          datasets: [
+            {
+              label: 'Bruto',
+              data: [{{this.t_mudanza}}, {{this.tdo}}, {{this.t_total}}],
+              backgroundColor: 'rgba(54, 162, 235, 1)',
+              borderColor: 'rgba(54, 162, 235, 1)',
+            },
+            {
+              label: 'Neto',
+              data: [{{this.t_mudanza_neto}}, {{this.tdo_neto}}, {{this.t_total_neto}}],
+              backgroundColor: 'rgba(255, 205, 86, 1)',
+              borderColor: 'rgba(255, 205, 86, 1)',
+            }
+          ]
+        },
+        options: {
+          scales: {
+            y: { beginAtZero: true }
+          }
+        }
+      });
+    {{/each}}
+  });
+</script>
